@@ -1,0 +1,263 @@
+<div class="content-wrapper">
+   <!-- Content Header (Page header) -->
+   <section class="content-header">
+      <h1>
+         <?= $page_title ?>
+      </h1>
+      <ol class="breadcrumb">
+         <li><a href="<?php echo base_url(); ?>Welcome/"><i class="fa fa-user-md"></i>Home</a></li>
+         <li class="active"><?= $page_title ?></li>
+      </ol>
+   </section>
+   <!-- Main content -->
+   <section class="content">
+      <div class="row">
+         <div class="col-xs-12">
+            <?php
+               if ($this->session->flashdata('message')) {
+                   $message = $this->session->flashdata('message');
+               ?>
+            <div class="alert alert-<?php echo $message['class']; ?>">
+               <button class="close" data-dismiss="alert" type="button">x</button>
+               <?php echo $message['message']; ?>
+            </div>
+            <?php
+               }
+               ?>
+         </div>
+       <!--   <ol class="breadcrumb">
+            <li><a data-toggle='modal' data-target='#add_category'><button class="btn add-new" type="button"><b><i class="fa fa-fw fa-plus"></i> Add <?= $page_title ?></b></button></a>
+         </ol> -->
+         <div class="col-xs-12">
+            <!-- /.box -->
+            <div class="box">
+               <div class="box-header">
+               </div>
+               <!-- /.box-header -->
+               <div class="box-body table-responsive">
+                  <table id="example1" class="table table-bordered table-striped datatable">
+                     <thead>
+                        <tr>
+                           <th>S.No </th>
+                           <th>Broadcast ID </th>
+                           <th>Astrologer ID </th>
+                           <th>Astrologer </th>
+                           <th>Ttitle </th>
+                           <th>Description </th>
+                           <th>Status  </th>
+                           <th>Start Time </th>
+                           <th>End Time </th>
+                           <th>Total Minutes </th>
+                           <th>Total Seconds </th>
+                           <th>Price </th>
+                           <th>Language </th>
+                           <th>Gifts </th>
+                           <th>Created At </th>
+                           <th>Is Approved</th>
+                           <th>Action</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <?php
+                        $i=1;
+                           foreach ($list as $card) {
+                           ?>
+                        <!-- Modal -->
+                        <div id="update_category_<?=$card->id?>" class="modal fade" role="dialog">
+                           <div class="modal-dialog">
+                              <!-- Modal content-->
+                              <div class="modal-content">
+                                 <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Edit <?= $page_title ?></h4>
+                                 </div>
+                                 <div class="modal-body">
+                                    <form method="post" enctype="multipart/form-data">
+                                       <div class="form-group">
+                                          <label for="">Name<span style="color: red">*</span></label>
+                                          <input type="text" name="name" value="<?=$card->name?>" class="form-control" placeholder="Name" required>
+                                          <input type="hidden" name="id" value="<?=$card->id?>">
+                                       </div>
+                                       <div class="form-group">
+                                          <label for="">Position <span style="color: red">*</span></label>
+                                          <input type="number" name="position" value="<?=$card->position?>"  min ="0" class="form-control" placeholder="Position" required>
+                                       </div>
+                                       <div class="form-group">
+                                          <label for="">Price<span style="color: red">*</span></label>
+                                         <input type="number" name="price" value="<?=$card->price?>"  min ="0" class="form-control" placeholder="price" required>
+                                       </div>
+                                       <div class="form-group">
+                                          <label for="">Status<span style="color: red">*</span></label>
+                                          <select name="status" class="form-control" required>
+                                             <option value="">Select</option>
+                                             <option value="1" <?=$card->status == 1 ? 'selected' : ''?>>Active</option>
+                                             <option value="0" <?=$card->status == 0 ? 'selected' : ''?>>Disable</option>
+                                          </select>
+                                       </div>
+
+                                         <div class="form-group">
+                                          <label for="">Image<span style="color: red">*</span></label>
+                                          <input type="file" id="files" name="image" class="form-control" placeholder="Name">
+                                          <input type="hidden" name="old_image" value="<?=$card->image?>">
+                                       </div>
+
+
+                                       <div class="form-group">
+                                          <button type="submit" name="update_category" class="btn btn-primary">Update</button>
+                                       </div>
+                                    </form>
+                                 </div>
+                                 <div class="modal-footer">
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <tr>
+                           <td class="center"><?php echo $i++; ?></td>
+                           <td class="center"><?php echo $card->id; ?></td>
+                           <td class="center"><?php echo $card->astrologer_id; ?></td>
+
+                           <td class="center"><?php 
+                           $astrologer_id = $card->astrologer_id;
+                           $sp = $this->db->query("select * from astrologers where id =  $astrologer_id")->row();
+                         //  echo $card->city_id ; 
+                           if ($sp) 
+                           {
+                              echo $sp->name ; 
+                           }
+
+                           ?></td>
+
+                         
+                          
+                              <td class="center"><?php echo $card->title; ?></td>   
+                              <td class="center"><?php echo $card->description; ?></td>   
+                           <td><span class="center label  <?php if ($card->status == '1') {
+                              echo "label-success";
+                              } else {
+                              echo "label-warning";
+                              }
+                              ?>"><?php 
+                              if ($card->status == '1') {
+                              echo "Start";
+                              } 
+                              if ($card->status == '2') {
+                              echo "End";
+                              } 
+
+                              else {
+                              echo "not start";
+                              }
+                              ?></span>
+                           </td>
+                           <td class="center"><?php echo date("d-m-Y h:i:s A",  strtotime($card->start_time)); ?></td>
+                           <td class="center"><?php echo date("d-m-Y h:i:s A",  strtotime($card->end_time)); ?></td>
+                              <td class="center"><?php echo $card->total_minutes; ?></td>   
+                              <td class="center"><?php echo $card->total_seconds; ?></td>   
+                              <td class="center"><?php echo $card->price; ?></td>   
+                              <td class="center"><?php echo $card->language; ?></td>   
+                              <td class="center"><?php echo $card->gifts_id; ?></td>   
+                           <td class="center"><?php echo date("d-m-Y h:i:s A",  strtotime($card->created_at)); ?></td>
+                           <td class="center"><?=$card->is_approved==1?'Yes':'No' ?></td>
+                           <td>
+                            <?php if($card->is_approved==0 && $card->status !=2): ?>
+                              <a class="btn btn-sm btn-primary" onclick="return confirm('Are you sure?)" href="<?=base_url('broadcasts_management/approve_broadcast/'.$card->id)?>">Approve</a>
+                              <?php endif; ?>
+
+
+                                <a class="btn btn-sm btn-danger" href="<?php echo base_url(); ?>broadcasts_management/delete_broadcasts/<?php echo $card->id; ?>" onClick="return doconfirm()">
+                              <i class="fa fa-fw fa-trash"></i>Delete</a>
+
+
+                           </td>
+                        </tr>
+                        <?php
+                           }
+                           ?>
+                     </tbody>
+                     <tfoot>
+                        <tr>
+                           <th>S.No </th>
+                           <th>Broadcast ID </th>
+                           <th>Astrologer Id </th>
+                           <th>Astrologer </th>
+                           <th>Ttitle </th>
+                           <th>Description </th>
+                           <th>Status  </th>
+                           <th>Start Time </th>
+                           <th>End Time </th>
+                           <th>Total Minutes </th>
+                           <th>Total Seconds </th>
+                           <th>Price </th>
+                           <th>Language </th>
+                           <th>Gifts </th>
+                           <th>Created At </th>
+                           <th>Is Approved</th>
+                           <th>Action</th>
+                        </tr>
+                     </tfoot>
+                  </table>
+               </div>
+               <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+         </div>
+         <!-- /.col -->
+      </div>
+      <!-- /.row -->
+   </section>
+   <!-- /.content -->
+</div>
+<!-- Modal -->
+<div id="add_category" class="modal fade" role="dialog">
+   <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add <?= $page_title ?></h4>
+         </div>
+         <div class="modal-body">
+            <form method="post" enctype="multipart/form-data">
+               <div class="form-group">
+                  <label for="">Name<span style="color: red">*</span></label>
+                  <input type="text" name="name" class="form-control" placeholder="Name" required>
+               </div>
+
+                    <div class="form-group">
+                  <label for="">Image<span style="color: red">*</span></label>
+                  <input type="file" id="files" name="image" class="form-control" placeholder="Name" required>
+               </div>
+               <div class="form-group">
+                  <label for="">Position<span style="color: red">*</span></label>
+                  <input type="number" min="1" name="position" class="form-control" placeholder="Name" required>
+               </div>
+               <div class="form-group">
+                  <label for="">Price<span style="color: red">*</span></label>
+                  <input type="number" min="1" name="price" class="form-control" placeholder="price" required>
+               </div>
+
+
+              
+               <div class="form-group">
+                  <label for="">Status<span style="color: red">*</span></label>
+                  <select name="status" class="form-control" required>
+                     <option value="">Select</option>
+                     <option value="1">Active</option>
+                     <option value="0">Disable</option>
+                  </select>
+               </div>
+               <div class="form-group">
+                  <button type="submit" name="save_category" class="btn btn-primary">Add</button>
+               </div>
+            </form>
+         </div>
+         <div class="modal-footer">
+         </div>
+      </div>
+   </div>
+</div>
+<script>
+   base_url = "<?php echo base_url(); ?>";
+   config_url = "<?php echo base_url(); ?>";
+</script>
